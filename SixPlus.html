@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>6Plus Apparel – Custom Apparel & Personalized Gifts</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Cormorant+Garamond:wght@400;600&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --pink-deep: #c2185b;
+    --pink-hot: #e91e8c;
+    --pink-light: #f8bbd0;
+    --pink-blush: #fce4ec;
+    --gold: #d4a017;
+    --gold-light: #f5d76e;
+    --gold-bright: #ffd700;
+    --dark: #1a0a10;
+    --white: #fff8fc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── GLITTER CANVAS ── */
+  #glitter-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(26,10,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212,160,23,0.3);
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-bright), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--pink-light);
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+    font-weight: 600;
+  }
+  .nav-links a:hover { color: var(--gold-bright); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(194,24,91,0.45) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(212,160,23,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(233,30,140,0.2) 0%, transparent 60%),
+      #1a0a10;
+    z-index: -1;
+  }
+
+  .crown {
+    font-size: 2.5rem;
+    animation: float 3s ease-in-out infinite;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .hero-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(3rem, 10vw, 7rem);
+    line-height: 1;
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-bright) 40%, var(--gold) 70%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 30px rgba(212,160,23,0.5));
+    animation: shimmer 3s linear infinite;
+    background-size: 200%;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  .hero-subtitle {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    color: var(--pink-hot);
+    letter-spacing: 6px;
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+  }
+
+  .hero-tagline {
+    margin-top: 1.5rem;
+    font-size: 1.3rem;
+    color: var(--pink-light);
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+
+  .hero-divider {
+    width: 200px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1.5rem auto;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 1rem 2.8rem;
+    background: linear-gradient(135deg, var(--pink-deep), var(--pink-hot));
+    color: #fff;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-decoration: none;
+    border: 2px solid var(--gold);
+    border-radius: 2px;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(233,30,140,0.4);
+  }
+  .hero-cta:hover {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(212,160,23,0.5);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.7rem;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-bright));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 3rem;
+  }
+
+  /* ── PRODUCTS GRID ── */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background: linear-gradient(135deg, rgba(194,24,91,0.12), rgba(26,10,16,0.9));
+    border: 1px solid rgba(212,160,23,0.3);
+    border-radius: 4px;
+    padding: 2rem 1.5rem;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(212,160,23,0.06), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .product-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(212,160,23,0.2);
+  }
+  .product-card:hover::before { opacity: 1; }
+
+  .product-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+
+  .product-name {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.85rem;
+    color: var(--gold-bright);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-desc {
+    color: var(--pink-light);
+    font-size: 1rem;
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+
+  .product-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+  }
+
+  .product-price span {
+    font-size: 0.85rem;
+    color: var(--pink-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+
+  /* ── ORDER INFO ── */
+  .order-strip {
+    background: linear-gradient(135deg, rgba(194,24,91,0.2), rgba(212,160,23,0.1));
+    border: 1px solid rgba(212,160,23,0.4);
+    border-radius: 4px;
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .order-item { text-align: center; }
+  .order-icon { font-size: 2rem; display: block; margin-bottom: 0.8rem; }
+  .order-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .order-text { color: var(--pink-light); font-size: 1rem; line-height: 1.6; }
+  .order-text strong { color: var(--gold-bright); }
+
+  /* ── PAYMENT POLICY ── */
+  .policy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .policy-card {
+    background: rgba(26,10,16,0.8);
+    border: 1px solid rgba(194,24,91,0.4);
+    border-radius: 4px;
+    padding: 1.8rem 1.5rem;
+    text-align: center;
+  }
+
+  .policy-icon { font-size: 2rem; margin-bottom: 0.8rem; display: block; }
+  .policy-text { color: var(--pink-light); font-size: 1rem; line-height: 1.6; }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    text-align: center;
+  }
+
+  .contact-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .contact-card {
+    background: linear-gradient(135deg, rgba(194,24,91,0.15), rgba(26,10,16,0.9));
+    border: 1px solid rgba(212,160,23,0.35);
+    border-radius: 4px;
+    padding: 1.5rem 2rem;
+    min-width: 200px;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .contact-card:hover {
+    border-color: var(--gold-bright);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(212,160,23,0.25);
+  }
+
+  .contact-card .c-icon { font-size: 1.8rem; }
+  .contact-card .c-label {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+  }
+  .contact-card .c-value { color: var(--pink-light); font-size: 0.95rem; }
+
+  .fb-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 2.5rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #1877f2, #0d5ec7);
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    border-radius: 4px;
+    border: 2px solid rgba(255,255,255,0.2);
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(24,119,242,0.4);
+  }
+  .fb-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(24,119,242,0.5);
+  }
+
+  /* ── OWNER ── */
+  .owner-bar {
+    text-align: center;
+    padding: 2.5rem;
+    border-top: 1px solid rgba(212,160,23,0.2);
+    border-bottom: 1px solid rgba(212,160,23,0.2);
+    margin: 2rem 0;
+  }
+  .owner-bar p { color: var(--pink-light); font-style: italic; font-size: 1.1rem; }
+  .owner-bar strong {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--gold-bright);
+    font-size: 1.4rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2.5rem;
+    background: rgba(26,10,16,0.9);
+    border-top: 1px solid rgba(212,160,23,0.25);
+    color: rgba(248,187,208,0.5);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  footer .footer-name {
+    font-family: 'Cinzel Decorative', cursive;
+    color: var(--gold);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  /* ── FULL-WIDTH WRAPPER ── */
+  .full-width-section {
+    background: rgba(26,10,16,0.6);
+    border-top: 1px solid rgba(212,160,23,0.15);
+    border-bottom: 1px solid rgba(212,160,23,0.15);
+  }
+
+  /* ── RUSH FEE BADGE ── */
+  .rush-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: linear-gradient(135deg, rgba(212,160,23,0.2), rgba(212,160,23,0.05));
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 1rem 2rem;
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: var(--pink-light);
+  }
+  .rush-badge strong { color: var(--gold-bright); font-size: 1.2rem; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0.8rem 1.2rem; }
+    .nav-links { gap: 1rem; }
+    .order-strip { padding: 2rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="glitter-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">6Plus Apparel</span>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#orders">Orders</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <span class="crown">👑</span>
+  <h1 class="hero-title">6Plus</h1>
+  <p class="hero-subtitle">Apparel</p>
+  <div class="hero-divider"></div>
+  <p class="hero-tagline">Custom Apparel & Personalized Gifts</p>
+  <a href="#products" class="hero-cta">Shop the Collection</a>
+</div>
+
+<!-- PRODUCTS -->
+<div class="full-width-section" id="products">
+  <section>
+    <span class="section-label">What We Create</span>
+    <h2 class="section-title">Our Products</h2>
+    <div class="products-grid">
+
+      <div class="product-card reveal">
+        <span class="product-icon">👕</span>
+        <p class="product-name">Custom T-Shirts</p>
+        <p class="product-desc">Personalized designs crafted just for you — any size, color, or occasion.</p>
+        <p class="product-price">Pricing Varies <span>by size, color, design & turnaround</span></p>
+      </div>
+
+      <div class="product-card reveal">
+        <span class="product-icon">🥤</span>
+        <p class="product-name">Tumblers</p>
+        <p class="product-desc">Stunning custom tumblers — perfect gifts for any occasion.</p>
+        <p class="product-price">Starting at $25</p>
+      </div>
+
+      <div class="product-card reveal">
+        <span class="product-icon">🤍</span>
+        <p class="product-name">Heart Necklaces</p>
+        <p class="product-desc">Delicate heart necklaces for the ones you love.</p>
+        <p class="product-price">$15</p>
+      </div>
+
+      <div class="product-card reveal">
+        <span class="product-icon">🦋</span>
+        <p class="product-name">Angel Wing Necklaces</p>
+        <p class="product-desc">Elegant angel wing necklaces, beautifully crafted.</p>
+        <p class="product-price">$20</p>
+      </div>
+
+      <div class="product-card reveal">
+        <span class="product-icon">🏷️</span>
+        <p class="product-name">Car Tags</p>
+        <p class="product-desc">Custom car tags to show off your unique style on the road.</p>
+        <p class="product-price">Starting at $25</p>
+      </div>
+
+      <div class="product-card reveal">
+        <span class="product-icon">📋</span>
+        <p class="product-name">Yard Signs</p>
+        <p class="product-desc">Bold yard signs for celebrations, events & announcements.</p>
+        <p class="product-price">
+          Single Sided — $30&nbsp;&nbsp;|&nbsp;&nbsp;Double Sided — $35
+          <br><span>+ $5 Design Fee</span>
+        </p>
+      </div>
+
+      <div class="product-card reveal">
+        <span class="product-icon">🖼️</span>
+        <p class="product-name">Custom Picture Tassel</p>
+        <p class="product-desc">Beautiful personalized picture tassels — a keepsake to treasure.</p>
+        <p class="product-price">$25</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- ORDER INFO -->
+<div id="orders">
+  <section>
+    <span class="section-label">How It Works</span>
+    <h2 class="section-title">Order Information</h2>
+
+    <div class="order-strip reveal">
+      <div class="order-item">
+        <span class="order-icon">⏱️</span>
+        <p class="order-title">Turnaround Time</p>
+        <p class="order-text"><strong>5–10 Business Days</strong><br>Some orders may take longer depending on complexity.</p>
+      </div>
+      <div class="order-item">
+        <span class="order-icon">⚡</span>
+        <p class="order-title">Rush Orders</p>
+        <p class="order-text"><strong>$50 Rush Fee</strong><br>Added to orders needed before standard turnaround.</p>
+      </div>
+      <div class="order-item">
+        <span class="order-icon">📌</span>
+        <p class="order-title">Disclaimer</p>
+        <p class="order-text">Please read the disclaimer <strong>pinned to our Facebook page</strong> before ordering.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.8rem; color:var(--gold-bright); margin-top:3rem; margin-bottom:1rem;">Payment Policy</h3>
+    <div class="policy-grid reveal">
+      <div class="policy-card">
+        <span class="policy-icon">✅</span>
+        <p class="policy-text">All payments are due <strong style="color:var(--gold-bright)">when the order is placed</strong></p>
+      </div>
+      <div class="policy-card">
+        <span class="policy-icon">🚫</span>
+        <p class="policy-text"><strong style="color:var(--gold-bright)">No Payment = No Order</strong></p>
+      </div>
+      <div class="policy-card">
+        <span class="policy-icon">💳</span>
+        <p class="policy-text"><strong style="color:var(--gold-bright)">Full Payment Only</strong> — No deposits accepted</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CONTACT -->
+<div class="full-width-section" id="contact">
+  <section class="contact-section">
+    <span class="section-label">Get In Touch</span>
+    <h2 class="section-title">Contact Us</h2>
+
+    <div class="owner-bar reveal">
+      <p>Owner: <strong>Imeshia K. Davis</strong></p>
+    </div>
+
+    <div class="contact-cards reveal">
+      <a class="contact-card" href="tel:6019095136">
+        <span class="c-icon">📞</span>
+        <span class="c-label">Phone</span>
+        <span class="c-value">601-909-5136</span>
+      </a>
+      <a class="contact-card" href="mailto:imeshiad@mamameshia.net">
+        <span class="c-icon">✉️</span>
+        <span class="c-label">Email</span>
+        <span class="c-value">imeshiad@mamameshia.net</span>
+      </a>
+    </div>
+
+    <br>
+    <a class="fb-btn" href="https://www.facebook.com/SIXPLUSMESHIA" target="_blank" rel="noopener">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+      Follow Us on Facebook — 6 Plus Apparel
+    </a>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-name">6Plus Apparel</span>
+  Custom Apparel & Personalized Gifts &nbsp;•&nbsp; © 2025 All Rights Reserved
+</footer>
+
+<script>
+// ── GLITTER ANIMATION ──
+const canvas = document.getElementById('glitter-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const colors = ['#ffd700','#f5d76e','#e91e8c','#f8bbd0','#ffffff','#d4a017'];
+
+function createParticle() {
+  return {
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 2 + 0.5,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    alpha: Math.random(),
+    speed: Math.random() * 0.4 + 0.1,
+    twinkle: Math.random() * 0.02 + 0.005,
+    phase: Math.random() * Math.PI * 2,
+  };
+}
+
+for (let i = 0; i < 180; i++) particles.push(createParticle());
+
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H);
+  const now = Date.now() / 1000;
+  for (const p of particles) {
+    p.alpha = 0.3 + 0.7 * Math.abs(Math.sin(now * p.speed + p.phase));
+    ctx.save();
+    ctx.globalAlpha = p.alpha * 0.6;
+    ctx.fillStyle = p.color;
+    ctx.shadowColor = p.color;
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+reveals.forEach(r => observer.observe(r));
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
