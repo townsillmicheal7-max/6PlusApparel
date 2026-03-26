@@ -574,6 +574,44 @@
         <p class="policy-text"><strong style="color:var(--gold-bright)">Full Payment Only</strong> — No deposits accepted</p>
       </div>
     </div>
+
+    <!-- CASH APP PAYMENT OPTION -->
+    <div style="
+      margin-top: 2.5rem;
+      padding: 2rem 2rem;
+      background: linear-gradient(135deg, #00a825, #00d632);
+      border-radius: 12px;
+      border: 3px solid #fff;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,214,50,0.5);
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    ">
+      <p style="font-size:2.5rem; margin-bottom:0.3rem;">💵</p>
+      <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:5px; color:rgba(255,255,255,0.85); margin-bottom:0.4rem;">PAYMENT ACCEPTED VIA</p>
+      <p style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:#fff; margin-bottom:0.8rem;">Cash App</p>
+      <a href="https://cash.app/$sixplusmeshia" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none; margin-bottom:1rem;">
+        <div style="background:rgba(0,0,0,0.25); border-radius:8px; padding:0.7rem 1.5rem; border:2px solid rgba(255,255,255,0.4); transition:all 0.3s;">
+          <p style="font-family:'Cinzel Decorative',cursive; font-size:1.2rem; color:#fff; letter-spacing:2px;">$sixplusmeshia</p>
+          <p style="font-size:0.7rem; color:rgba(255,255,255,0.75); margin-top:0.3rem; font-style:italic;">tap to open Cash App</p>
+        </div>
+      </a>
+      <br>
+      <a href="https://cash.app/$sixplusmeshia" target="_blank" rel="noopener" style="
+        display: inline-block;
+        padding: 0.8rem 2.2rem;
+        background: #fff;
+        color: #00a825;
+        font-family: 'Cinzel Decorative', cursive;
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+      ">Pay Now on Cash App</a>
+    </div>
   </section>
 </div>
 
@@ -744,7 +782,7 @@ const observer = new IntersectionObserver(entries => {
       observer.unobserve(e.target);
     }
   });
-}, { threshold: 0.15 });
+}, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
 reveals.forEach(r => observer.observe(r));
 
 // ── SMOOTH SCROLL ──
