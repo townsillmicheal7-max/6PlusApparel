@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard</title>
+<!-- No brand name, no hints for attackers -->
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#1a0a10;color:#fff8fc;font-family:Georgia,serif;min-height:100vh;}
+
+  /* ── LOGIN ── */
+  #login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;
+    background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(194,24,91,0.25) 0%,transparent 70%),#1a0a10;}
+  .login-box{background:rgba(30,12,20,0.98);border:1px solid rgba(212,160,23,0.35);border-radius:12px;
+    padding:3rem 2.5rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6);}
+  .login-box h1{font-size:0.8rem;letter-spacing:4px;color:#d4a017;margin-bottom:0.3rem;text-transform:uppercase;}
+  .login-box p{color:#f8bbd0;font-size:0.85rem;margin-bottom:2rem;font-style:italic;}
+  .login-box input{width:100%;padding:0.9rem 1rem;background:rgba(255,255,255,0.07);border:1px solid rgba(212,160,23,0.4);
+    border-radius:6px;color:#fff;font-size:1rem;outline:none;margin-bottom:1rem;}
+  .login-box button{width:100%;padding:1rem;background:linear-gradient(135deg,#c2185b,#e91e8c);color:#fff;
+    font-size:0.7rem;letter-spacing:3px;border:2px solid #d4a017;border-radius:6px;cursor:pointer;text-transform:uppercase;}
+  .login-box button:disabled{opacity:0.5;cursor:not-allowed;}
+  #login-msg{font-size:0.85rem;margin-top:0.8rem;min-height:1.2rem;}
+  .err{color:#ff6b6b;} .warn{color:#ffd700;} .info{color:#f8bbd0;font-style:italic;}
+
+  /* ── DASHBOARD ── */
+  #dashboard{display:none;}
+  header{background:rgba(26,10,16,0.98);border-bottom:1px solid rgba(212,160,23,0.3);
+    padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;
+    position:sticky;top:0;z-index:100;}
+  header h1{font-size:0.85rem;letter-spacing:3px;color:#ffd700;}
+  header button{padding:0.5rem 1.2rem;background:transparent;border:1px solid rgba(194,24,91,0.5);
+    color:#f8bbd0;border-radius:4px;cursor:pointer;font-size:0.9rem;}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;padding:1.5rem 2rem;}
+  .stat{background:rgba(30,12,20,0.95);border:1px solid rgba(212,160,23,0.2);border-radius:8px;padding:1.2rem;text-align:center;}
+  .stat-n{font-size:2rem;font-weight:900;color:#ffd700;}
+  .stat-l{font-size:0.5rem;letter-spacing:3px;color:#f8bbd0;margin-top:0.3rem;text-transform:uppercase;}
+
+  .tabs{display:flex;border-bottom:1px solid rgba(212,160,23,0.2);padding:0 2rem;overflow-x:auto;}
+  .tab{padding:0.9rem 1.5rem;cursor:pointer;font-size:0.6rem;letter-spacing:2px;color:#f8bbd0;
+    border-bottom:2px solid transparent;white-space:nowrap;text-transform:uppercase;transition:all 0.2s;}
+  .tab.on{color:#ffd700;border-bottom-color:#ffd700;}
+
+  .pane{display:none;padding:1.5rem 2rem;overflow-x:auto;}
+  .pane.on{display:block;}
+  .pane-header{display:flex;justify-content:flex-end;margin-bottom:1rem;}
+  .refresh{padding:0.5rem 1.2rem;background:linear-gradient(135deg,#c2185b,#e91e8c);color:#fff;
+    border:1px solid #d4a017;border-radius:4px;cursor:pointer;font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;}
+
+  table{width:100%;border-collapse:collapse;}
+  th{font-size:0.5rem;letter-spacing:2px;color:#d4a017;text-align:left;padding:0.8rem;
+    border-bottom:1px solid rgba(212,160,23,0.3);white-space:nowrap;text-transform:uppercase;}
+  td{padding:0.8rem;color:#f8bbd0;font-size:0.9rem;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;}
+  tr:hover td{background:rgba(194,24,91,0.06);}
+  select.s{background:#2a0d18;border:1px solid rgba(212,160,23,0.3);color:#fff;padding:0.3rem 0.5rem;
+    border-radius:4px;cursor:pointer;font-size:0.85rem;}
+  .empty{text-align:center;padding:3rem;color:rgba(248,187,208,0.4);font-style:italic;}
+  .loading{text-align:center;padding:2rem;color:#d4a017;font-style:italic;}
+  .error-msg{color:#ff6b6b;padding:1rem;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-box">
+    <h1>6Plus Apparel</h1>
+    <p>Authorized access only</p>
+    <input id="pwd" type="password" placeholder="Password" autocomplete="current-password"/>
+    <button id="login-btn" onclick="doLogin()">Enter</button>
+    <div id="login-msg" class="info"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <header>
+    <h1>👑 6Plus Apparel — Dashboard</h1>
+    <button onclick="doLogout()">Sign Out</button>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="s-orders">—</div><div class="stat-l">Orders</div></div>
+    <div class="stat"><div class="stat-n" id="s-pending">—</div><div class="stat-l">Pending</div></div>
+    <div class="stat"><div class="stat-n" id="s-shipping">—</div><div class="stat-l">Shipping</div></div>
+    <div class="stat"><div class="stat-n" id="s-messages">—</div><div class="stat-l">New Messages</div></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" onclick="switchTab('orders')">📦 Orders</div>
+    <div class="tab" onclick="switchTab('shipping')">🚚 Shipping</div>
+    <div class="tab" onclick="switchTab('messages')">✉️ Messages</div>
+  </div>
+
+  <div id="pane-orders" class="pane on">
+    <div class="pane-header"><button class="refresh" onclick="loadOrders()">↻ Refresh</button></div>
+    <div id="tbl-orders" class="loading">Loading...</div>
+  </div>
+  <div id="pane-shipping" class="pane">
+    <div class="pane-header"><button class="refresh" onclick="loadShipping()">↻ Refresh</button></div>
+    <div id="tbl-shipping" class="loading">Loading...</div>
+  </div>
+  <div id="pane-messages" class="pane">
+    <div class="pane-header"><button class="refresh" onclick="loadMessages()">↻ Refresh</button></div>
+    <div id="tbl-messages" class="loading">Loading...</div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+const SB   = 'https://hssqujhernibnkplmnbs.supabase.co';
+const KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzc3F1amhlcm5pYm5rcGxtbmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjI0NjQsImV4cCI6MjA4OTkzODQ2NH0.TIypVVcgf0Rh_iKH3znoWXra7uXAnaQaL9NfebPZICk';
+const PWD  = '6PlusApparel2026!';
+
+// ── RATE LIMITING ──
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS   = 15 * 60 * 1000; // 15 minutes
+
+function getAttempts() { return parseInt(localStorage.getItem('_fa')||'0'); }
+function getLockout()  { return parseInt(localStorage.getItem('_fl')||'0'); }
+function bumpAttempts(){ localStorage.setItem('_fa', getAttempts()+1); }
+function resetAttempts(){ localStorage.removeItem('_fa'); localStorage.removeItem('_fl'); }
+function setLockout()  { localStorage.setItem('_fl', Date.now()+LOCKOUT_MS); }
+
+function isLockedOut() {
+  const until = getLockout();
+  if (!until) return false;
+  if (Date.now() < until) return true;
+  resetAttempts(); return false;
+}
+
+function doLogin() {
+  const msg = document.getElementById('login-msg');
+  const btn = document.getElementById('login-btn');
+  const pwd = document.getElementById('pwd').value;
+
+  if (isLockedOut()) {
+    const mins = Math.ceil((getLockout()-Date.now())/60000);
+    msg.className='err'; msg.textContent='Too many attempts. Try again in '+mins+' minute(s).';
+    return;
+  }
+
+  if (pwd === PWD) {
+    resetAttempts();
+    document.getElementById('login').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    loadOrders(); loadShipping(); loadMessages();
+  } else {
+    bumpAttempts();
+    const left = MAX_ATTEMPTS - getAttempts();
+    if (left <= 0) {
+      setLockout();
+      btn.disabled = true;
+      msg.className='err'; msg.textContent='Account locked for 15 minutes due to too many failed attempts.';
+    } else {
+      msg.className='err'; msg.textContent='Incorrect password. '+left+' attempt(s) remaining.';
+    }
+  }
+}
+
+document.getElementById('pwd').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+// Check lockout on page load
+window.addEventListener('load', () => {
+  if (isLockedOut()) {
+    const mins = Math.ceil((getLockout()-Date.now())/60000);
+    const msg = document.getElementById('login-msg');
+    msg.className='err'; msg.textContent='Too many attempts. Try again in '+mins+' minute(s).';
+    document.getElementById('login-btn').disabled = true;
+  }
+});
+
+function doLogout() {
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('login').style.display='flex';
+  document.getElementById('pwd').value='';
+}
+
+// ── TABS ──
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const tabs=['orders','shipping','messages'];
+    t.classList.toggle('on', tabs[i]===name);
+  });
+  document.querySelectorAll('.pane').forEach(p=>{
+    p.classList.toggle('on', p.id==='pane-'+name);
+  });
+}
+
+// ── API ──
+async function sbGet(table) {
+  const r = await fetch(SB+'/rest/v1/'+table+'?select=*&order=created_at.desc',{
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+  });
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+async function sbPatch(table, id, body) {
+  await fetch(SB+'/rest/v1/'+table+'?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(body)
+  });
+}
+
+// ── HELPERS ──
+function fmtDate(d){ return d ? new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—'; }
+function td(v){ return '<td>'+(v||'—')+'</td>'; }
+function mkTable(cols,rows){
+  if(!rows||!rows.length) return '<div class="empty">Nothing here yet.</div>';
+  return '<table><thead><tr>'+cols.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table>';
+}
+function sel(opts, cur, onchange){
+  return '<select class="s" onchange="'+onchange+'">'+
+    opts.map(o=>'<option value="'+o+'"'+(o===cur?' selected':'')+'>'+o.replace('_',' ')+'</option>').join('')+
+  '</select>';
+}
+
+// ── LOADERS ──
+async function loadOrders(){
+  document.getElementById('tbl-orders').innerHTML='<div class="loading">Loading...</div>';
+  try{
+    const data = await sbGet('orders');
+    document.getElementById('s-orders').textContent = data.length;
+    document.getElementById('s-pending').textContent = data.filter(o=>o.status==='pending').length;
+    const rows = data.map(o=>'<tr>'+
+      td('<span style="white-space:nowrap;font-size:0.8rem">'+fmtDate(o.created_at)+'</span>')+
+      td('<strong style="color:#fff">'+(o.customer_name||'')+'</strong>'+(o.customer_email?'<br><small>'+o.customer_email+'</small>':''))+
+      td(o.product||'—')+
+      td([o.size,o.color,o.custom_details].filter(Boolean).join(' · ')||'—')+
+      td(o.total_price?'$'+o.total_price:'—')+
+      td(o.rush_order?'⚡ Yes':'No')+
+      '<td>'+sel(['pending','in_progress','completed','cancelled'],o.status,'updateStatus(\'orders\',\''+o.id+'\',this.value,\'loadOrders\')')+'</td>'+
+    '</tr>');
+    document.getElementById('tbl-orders').innerHTML = mkTable(['Date','Customer','Product','Details','Price','Rush','Status'],rows);
+  }catch(e){ document.getElementById('tbl-orders').innerHTML='<div class="error-msg">Error loading orders.</div>'; }
+}
+
+async function loadShipping(){
+  document.getElementById('tbl-shipping').innerHTML='<div class="loading">Loading...</div>';
+  try{
+    const data = await sbGet('shipping_requests');
+    document.getElementById('s-shipping').textContent = data.length;
+    const rows = data.map(s=>'<tr>'+
+      td('<span style="white-space:nowrap;font-size:0.8rem">'+fmtDate(s.created_at)+'</span>')+
+      td('<strong style="color:#fff">'+(s.customer_name||'')+'</strong>')+
+      td((s.street_address||'')+'<br>'+(s.city||'')+', '+(s.state||'')+' '+(s.zip_code||''))+
+      td(s.estimated_weight||'—')+
+      td(s.order_details||'—')+
+      td(s.shipping_cost?'$'+s.shipping_cost:'—')+
+      '<td>'+sel(['pending','quoted','paid','shipped','delivered'],s.status,'updateStatus(\'shipping_requests\',\''+s.id+'\',this.value,\'loadShipping\')')+'</td>'+
+    '</tr>');
+    document.getElementById('tbl-shipping').innerHTML = mkTable(['Date','Customer','Address','Weight','Details','Cost','Status'],rows);
+  }catch(e){ document.getElementById('tbl-shipping').innerHTML='<div class="error-msg">Error loading shipping.</div>'; }
+}
+
+async function loadMessages(){
+  document.getElementById('tbl-messages').innerHTML='<div class="loading">Loading...</div>';
+  try{
+    const data = await sbGet('contact_submissions');
+    document.getElementById('s-messages').textContent = data.filter(m=>!m.responded).length;
+    const rows = data.map(m=>'<tr>'+
+      td('<span style="white-space:nowrap;font-size:0.8rem">'+fmtDate(m.created_at)+'</span>')+
+      td('<strong style="color:#fff">'+(m.name||'')+'</strong>')+
+      td((m.email||'')+(m.email&&m.phone?'<br>':'')+(m.phone||''))+
+      td('<span style="max-width:280px;display:block">'+(m.message||'')+'</span>')+
+      '<td><select class="s" onchange="markResponded(\''+m.id+'\',this.value===\'true\')">'+
+        '<option value="false"'+(!m.responded?' selected':'')+'>❌ No</option>'+
+        '<option value="true"'+(m.responded?' selected':'')+'>✅ Yes</option>'+
+      '</select></td>'+
+    '</tr>');
+    document.getElementById('tbl-messages').innerHTML = mkTable(['Date','Name','Contact','Message','Responded'],rows);
+  }catch(e){ document.getElementById('tbl-messages').innerHTML='<div class="error-msg">Error loading messages.</div>'; }
+}
+
+async function updateStatus(table,id,status,reload){
+  await sbPatch(table,id,{status});
+  if(reload==='loadOrders') loadOrders();
+  if(reload==='loadShipping') loadShipping();
+}
+async function markResponded(id,val){
+  await sbPatch('contact_submissions',id,{responded:val});
+  loadMessages();
+}
+</script>
+</body>
+</html>
