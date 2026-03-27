@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>6Plus Apparel – Custom Apparel & Personalized Gifts</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Cormorant+Garamond:wght@400;600&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --pink-deep: #c2185b;
@@ -457,6 +459,7 @@
     <li><a href="#products">Products</a></li>
     <li><a href="#orders">Orders</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="#shipping">Shipping</a></li>
     <li><a href="#order-now" style="color:var(--gold-bright);">Order Now</a></li>
   </ul>
 </nav>
@@ -541,26 +544,89 @@
     <span class="section-label">How It Works</span>
     <h2 class="section-title">Order Information</h2>
 
-    <div class="order-strip reveal">
-      <div class="order-item">
-        <span class="order-icon">⏱️</span>
-        <p class="order-title">Turnaround Time</p>
-        <p class="order-text"><strong>5–10 Business Days</strong><br>Some orders may take longer depending on complexity.</p>
+    <!-- FULL DISCLAIMER -->
+    <div style="margin-top:3rem; background:linear-gradient(135deg,rgba(194,24,91,0.15),rgba(26,10,16,0.95)); border:1px solid rgba(212,160,23,0.4); border-radius:8px; padding:2.5rem 2rem; max-width:900px; margin-left:auto; margin-right:auto;">
+      <h3 style="font-family:'Cinzel Decorative',cursive; font-size:1rem; color:var(--gold-bright); text-align:center; letter-spacing:3px; margin-bottom:0.3rem;">6 Plus Apparel</h3>
+      <h4 style="font-family:'Cinzel Decorative',cursive; font-size:0.75rem; color:var(--pink-hot); text-align:center; letter-spacing:4px; margin-bottom:2rem;">2026 PAYMENT POLICY & DISCLAIMER</h4>
+
+      <!-- Payment Terms -->
+      <div style="margin-bottom:1.8rem; border-bottom:1px solid rgba(212,160,23,0.2); padding-bottom:1.5rem;">
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:0.8rem;">PAYMENT TERMS</p>
+        <p style="color:var(--pink-light); font-size:0.95rem; line-height:1.8;">Full payment is required upfront. No negotiations or exceptions.<br>
+        Accepted payment methods: <strong style="color:var(--gold-bright)">PayPal, Chime, Venmo.</strong><br>
+        If you do not have these options, an invoice will be emailed via <em>Square or PayPal</em> and must be paid within 24 hours or the order will be canceled.</p>
       </div>
-      <div class="order-item">
-        <span class="order-icon">⚡</span>
-        <p class="order-title">Rush Orders</p>
-        <p class="order-text"><strong>$50 Rush Fee</strong><br>Added to orders needed before standard turnaround.</p>
+
+      <!-- Turnaround Time -->
+      <div style="margin-bottom:1.8rem; border-bottom:1px solid rgba(212,160,23,0.2); padding-bottom:1.5rem;">
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:0.8rem;">TURNAROUND TIME</p>
+        <p style="color:var(--pink-light); font-size:0.95rem; line-height:1.8;">
+          Standard Orders: <strong style="color:var(--gold-bright)">5–10 business days</strong> (weekends & holidays excluded).<br>
+          Sweatshirts, Hoodies & Baseball Shirts: <strong style="color:var(--gold-bright)">Up to 14 business days.</strong><br>
+          Turnaround time begins the business day <strong style="color:var(--gold-bright)">after payment is received.</strong>
+        </p>
       </div>
-      <div class="order-item">
-        <span class="order-icon">📌</span>
-        <p class="order-title">Disclaimer</p>
-        <p class="order-text">Please read the disclaimer <strong>pinned to our Facebook page</strong> before ordering.</p>
+
+      <!-- Rush Orders -->
+      <div style="margin-bottom:1.8rem; border-bottom:1px solid rgba(212,160,23,0.2); padding-bottom:1.5rem;">
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:0.8rem;">RUSH ORDERS</p>
+        <p style="color:var(--pink-light); font-size:0.95rem; line-height:1.8;">
+          Rush orders are any orders needed within <strong style="color:var(--gold-bright)">1–3 business days.</strong><br>
+          Example: Payment made Wednesday with a Friday deadline is considered rush.<br>
+          Rush Fee: <strong style="color:var(--gold-bright)">$50 in addition</strong> to the order total (non-negotiable).<br>
+          Rush order payment must be submitted within <strong style="color:var(--gold-bright)">1 hour of consultation</strong> or the rush slot is forfeited.
+        </p>
+      </div>
+
+      <!-- Cash Payments -->
+      <div style="margin-bottom:1.8rem; border-bottom:1px solid rgba(212,160,23,0.2); padding-bottom:1.5rem;">
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:0.8rem;">CASH PAYMENTS</p>
+        <p style="color:var(--pink-light); font-size:0.95rem; line-height:1.8;">Cash payments <strong style="color:var(--gold-bright)">must</strong> be made before any work begins.</p>
+      </div>
+
+      <!-- Additional Items -->
+      <div style="margin-bottom:1.8rem; border-bottom:1px solid rgba(212,160,23,0.2); padding-bottom:1.5rem;">
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:0.8rem;">ADDITIONAL ITEMS</p>
+        <p style="color:var(--pink-light); font-size:0.95rem; line-height:1.8;">Any additions to an existing order require <strong style="color:var(--gold-bright)">immediate payment</strong> and may extend turnaround time.</p>
+      </div>
+
+      <!-- Design Fees -->
+      <div style="margin-bottom:1.8rem; border-bottom:1px solid rgba(212,160,23,0.2); padding-bottom:1.5rem;">
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:0.8rem;">DESIGN FEES & MOCKUPS</p>
+        <p style="color:var(--pink-light); font-size:0.95rem; line-height:1.8;">
+          Mockups are not provided until payment is received.<br>
+          A <strong style="color:var(--gold-bright)">$15 design fee</strong> applies to any custom mockups when no ready design is selected.
+        </p>
+      </div>
+
+      <!-- DTF Prints -->
+      <div style="margin-bottom:1.8rem; border-bottom:1px solid rgba(212,160,23,0.2); padding-bottom:1.5rem;">
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:0.8rem;">DTF PRINTS – MINIMUM ORDER & FILE POLICY</p>
+        <p style="color:var(--pink-light); font-size:0.95rem; line-height:1.8;">
+          • All DTF print orders require a minimum of <strong style="color:var(--gold-bright)">4 prints per order.</strong><br>
+          • Files are printed exactly as submitted. <strong style="color:var(--gold-bright)">No edits or corrections included.</strong><br>
+          • Customers are responsible for file quality, sizing, and formatting.<br>
+          • If editing, resizing, background removal, or design work is requested, a <strong style="color:var(--gold-bright)">design fee will be added.</strong><br>
+          • Files must include clear transparent backgrounds. Poor or unclear files may be rejected as-is without refund.
+        </p>
+      </div>
+
+      <!-- Response Time -->
+      <div style="margin-bottom:1.8rem; border-bottom:1px solid rgba(212,160,23,0.2); padding-bottom:1.5rem;">
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:0.8rem;">RESPONSE TIME</p>
+        <p style="color:var(--pink-light); font-size:0.95rem; line-height:1.8;">Typical response time is within <strong style="color:var(--gold-bright)">2 hours</strong>, please allow up to 24 hours.</p>
+      </div>
+
+      <!-- Final Policy -->
+      <div style="background:rgba(194,24,91,0.2); border:1px solid var(--pink-hot); border-radius:6px; padding:1.5rem; text-align:center;">
+        <p style="font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; color:#fff; margin-bottom:0.4rem;">FINAL POLICY</p>
+        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.9rem; color:var(--gold-bright); letter-spacing:2px; margin-bottom:0.8rem;">ALL SALES ARE FINAL. NO REFUNDS. NO CHARGEBACKS.</p>
+        <p style="color:var(--pink-light); font-size:0.85rem; font-style:italic;">Placing an order confirms agreement to all 2026 policies listed above.</p>
       </div>
     </div>
 
     <h3 style="font-family:'Playfair Display',serif; font-size:1.8rem; color:var(--gold-bright); margin-top:3rem; margin-bottom:1rem;">Payment Policy</h3>
-    <div class="policy-grid reveal">
+    <div class="policy-grid" style="margin-top:2rem;">
       <div class="policy-card">
         <span class="policy-icon">✅</span>
         <p class="policy-text">All payments are due <strong style="color:var(--gold-bright)">when the order is placed</strong></p>
@@ -575,42 +641,44 @@
       </div>
     </div>
 
-    <!-- CASH APP PAYMENT OPTION -->
-    <div style="
-      margin-top: 2.5rem;
-      padding: 2rem 2rem;
-      background: linear-gradient(135deg, #00a825, #00d632);
-      border-radius: 12px;
-      border: 3px solid #fff;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0,214,50,0.5);
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    ">
-      <p style="font-size:2.5rem; margin-bottom:0.3rem;">💵</p>
-      <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:5px; color:rgba(255,255,255,0.85); margin-bottom:0.4rem;">PAYMENT ACCEPTED VIA</p>
-      <p style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:#fff; margin-bottom:0.8rem;">Cash App</p>
-      <a href="https://cash.app/$sixplusmeshia" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none; margin-bottom:1rem;">
-        <div style="background:rgba(0,0,0,0.25); border-radius:8px; padding:0.7rem 1.5rem; border:2px solid rgba(255,255,255,0.4); transition:all 0.3s;">
-          <p style="font-family:'Cinzel Decorative',cursive; font-size:1.2rem; color:#fff; letter-spacing:2px;">$sixplusmeshia</p>
-          <p style="font-size:0.7rem; color:rgba(255,255,255,0.75); margin-top:0.3rem; font-style:italic;">tap to open Cash App</p>
+    <!-- PAYMENT OPTIONS -->
+    <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:5px; color:var(--gold); text-align:center; margin-top:2.5rem; margin-bottom:1.2rem;">WE ACCEPT PAYMENT VIA</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.2rem; max-width:960px; margin:0 auto;">
+
+      <!-- Venmo -->
+      <div style="background:linear-gradient(135deg,#008acf,#3d95ce); border-radius:12px; border:2px solid rgba(255,255,255,0.25); padding:1.8rem 1.2rem; text-align:center; box-shadow:0 8px 24px rgba(0,138,207,0.35);">
+        <p style="font-size:2rem; margin-bottom:0.3rem;">💙</p>
+        <p style="font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:0.6rem;">Venmo</p>
+        <a href="https://account.venmo.com/u/sixplusmeshia" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none; margin-bottom:0.8rem;">
+          <div style="background:rgba(0,0,0,0.25); border-radius:6px; padding:0.5rem 1rem; border:1px solid rgba(255,255,255,0.35);">
+            <p style="font-family:'Cinzel Decorative',cursive; font-size:0.9rem; color:#fff; letter-spacing:1px;">@sixplusmeshia</p>
+            <p style="font-size:0.65rem; color:rgba(255,255,255,0.75); margin-top:0.2rem; font-style:italic;">tap to open</p>
+          </div>
+        </a>
+        <br>
+        <a href="https://account.venmo.com/u/sixplusmeshia" target="_blank" rel="noopener" style="display:inline-block; padding:0.6rem 1.6rem; background:#fff; color:#008acf; font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:2px; border-radius:50px; text-decoration:none; font-weight:700;">Pay Now</a>
+      </div>
+
+      <!-- PayPal -->
+      <div style="background:linear-gradient(135deg,#003087,#009cde); border-radius:12px; border:2px solid rgba(255,255,255,0.25); padding:1.8rem 1.2rem; text-align:center; box-shadow:0 8px 24px rgba(0,48,135,0.45);">
+        <p style="font-size:2rem; margin-bottom:0.3rem;">🅿️</p>
+        <p style="font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:0.6rem;">PayPal</p>
+        <div style="background:rgba(0,0,0,0.25); border-radius:6px; padding:0.5rem 1rem; border:1px solid rgba(255,255,255,0.35); display:inline-block; margin-bottom:0.8rem;">
+          <p style="font-family:'Cinzel Decorative',cursive; font-size:0.9rem; color:#fff; letter-spacing:1px;">Imeshia Kitchens</p>
+          <p style="font-size:0.65rem; color:rgba(255,255,255,0.75); margin-top:0.2rem; font-style:italic;">message us for PayPal link</p>
         </div>
-      </a>
-      <br>
-      <a href="https://cash.app/$sixplusmeshia" target="_blank" rel="noopener" style="
-        display: inline-block;
-        padding: 0.8rem 2.2rem;
-        background: #fff;
-        color: #00a825;
-        font-family: 'Cinzel Decorative', cursive;
-        font-size: 0.7rem;
-        letter-spacing: 2px;
-        border-radius: 50px;
-        text-decoration: none;
-        font-weight: 700;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-      ">Pay Now on Cash App</a>
+      </div>
+
+      <!-- Chime -->
+      <div style="background:linear-gradient(135deg,#1ec677,#00a86b); border-radius:12px; border:2px solid rgba(255,255,255,0.25); padding:1.8rem 1.2rem; text-align:center; box-shadow:0 8px 24px rgba(30,198,119,0.35);">
+        <p style="font-size:2rem; margin-bottom:0.3rem;">🏦</p>
+        <p style="font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:0.6rem;">Chime</p>
+        <div style="background:rgba(0,0,0,0.25); border-radius:6px; padding:0.5rem 1rem; border:1px solid rgba(255,255,255,0.35); display:inline-block; margin-bottom:0.8rem;">
+          <p style="font-family:'Cinzel Decorative',cursive; font-size:0.9rem; color:#fff; letter-spacing:1px;">$Imeshia-Kitchens</p>
+          <p style="font-size:0.65rem; color:rgba(255,255,255,0.75); margin-top:0.2rem; font-style:italic;">enter username in Chime</p>
+        </div>
+      </div>
+
     </div>
   </section>
 </div>
@@ -636,6 +704,35 @@
         <span class="c-label">Email</span>
         <span class="c-value"><span class="__cf_email__" data-cfemail="9af3f7ffe9f2f3fbfedaf7fbf7fbf7ffe9f2f3fbb4f4ffee">[email&#160;protected]</span></span>
       </a>
+    </div>
+
+    <!-- CONTACT FORM -->
+    <div style="margin-top:2.5rem; background:linear-gradient(135deg,rgba(194,24,91,0.15),rgba(26,10,16,0.95)); border:1px solid rgba(212,160,23,0.4); border-radius:12px; padding:2.5rem 2rem; max-width:600px; margin-left:auto; margin-right:auto;">
+      <p style="font-family:'Cinzel Decorative',cursive; font-size:0.65rem; letter-spacing:4px; color:var(--gold); margin-bottom:1.5rem;">SEND US A MESSAGE</p>
+
+      <div style="margin-bottom:1.2rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">YOUR NAME</label>
+        <input id="contact-name" type="text" placeholder="Full name" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.2rem;">
+        <div style="text-align:left;">
+          <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">EMAIL</label>
+          <input id="contact-email" type="email" placeholder="your@email.com" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+        </div>
+        <div style="text-align:left;">
+          <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">PHONE</label>
+          <input id="contact-phone" type="tel" placeholder="601-000-0000" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+        </div>
+      </div>
+      <div style="margin-bottom:1.5rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">MESSAGE</label>
+        <textarea id="contact-message" rows="4" placeholder="Tell us about your order or ask a question..." style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; resize:vertical;"></textarea>
+      </div>
+      <button onclick="submitContact()" style="width:100%; padding:1rem; background:linear-gradient(135deg,var(--pink-deep),var(--pink-hot)); color:#fff; font-family:'Cinzel Decorative',cursive; font-size:0.75rem; letter-spacing:3px; border:2px solid var(--gold); border-radius:6px; cursor:pointer; box-shadow:0 4px 20px rgba(233,30,140,0.4);">
+        ✉️ Send Message
+      </button>
+      <p id="contact-error" style="color:#ff6b6b; font-size:0.85rem; margin-top:0.8rem; display:none;">Please fill in your name and message.</p>
+      <p id="contact-success" style="color:#00d632; font-size:0.9rem; margin-top:0.8rem; display:none;">✅ Message sent! We'll get back to you soon.</p>
     </div>
 
     <br>
@@ -666,48 +763,7 @@
       <div class="order-item">
         <span class="order-icon">3️⃣</span>
         <p class="order-title">Send Payment</p>
-        <p class="order-text">Pay in full via <strong style="color:var(--gold-bright)">Cash App</strong>. Order begins once payment is received.</p>
-      </div>
-    </div>
-
-    <!-- CASH APP CARD -->
-    <div class="reveal" style="max-width:420px; margin: 0 auto;">
-      <div style="
-        background: linear-gradient(135deg, #00d632, #00a825);
-        border-radius: 16px;
-        padding: 2.5rem 2rem;
-        text-align: center;
-        box-shadow: 0 10px 40px rgba(0,214,50,0.3);
-        border: 2px solid rgba(255,255,255,0.15);
-      ">
-        <div style="font-size: 3rem; margin-bottom: 0.5rem;">💵</div>
-        <p style="font-family:'Cinzel Decorative',cursive; font-size:0.7rem; letter-spacing:4px; color:rgba(255,255,255,0.8); margin-bottom:0.5rem;">PAY VIA</p>
-        <p style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:#fff; margin-bottom:0.3rem;">Cash App</p>
-        <div style="
-          background: rgba(0,0,0,0.2);
-          border-radius: 8px;
-          padding: 0.8rem 1.5rem;
-          margin: 1rem auto;
-          display: inline-block;
-        ">
-          <p style="font-family:'Cinzel Decorative',cursive; font-size:1.3rem; color:#fff; letter-spacing:2px;">$sixplusmeshia</p>
-        </div>
-        <p style="color:rgba(255,255,255,0.8); font-size:0.95rem; font-style:italic; margin-top:0.8rem;">Full payment required to begin your order</p>
-        <a href="https://cash.app/$sixplusmeshia" target="_blank" rel="noopener" style="
-          display: inline-block;
-          margin-top: 1.5rem;
-          padding: 0.9rem 2.5rem;
-          background: #fff;
-          color: #00a825;
-          font-family: 'Cinzel Decorative', cursive;
-          font-size: 0.75rem;
-          letter-spacing: 2px;
-          border-radius: 50px;
-          text-decoration: none;
-          font-weight: 700;
-          transition: all 0.3s;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        ">Pay Now on Cash App</a>
+        <p class="order-text">Pay in full via your preferred payment method. Order begins once payment is received.</p>
       </div>
     </div>
 
@@ -715,6 +771,72 @@
       <p style="color:var(--pink-light); font-size:1rem;">⚠️ <strong style="color:var(--gold-bright)">No Payment = No Order.</strong> Full payment only — no deposits accepted.</p>
     </div>
 
+  </section>
+</div>
+
+<!-- SHIPPING -->
+<div class="full-width-section" id="shipping">
+  <section class="contact-section">
+    <span class="section-label">We Ship to You</span>
+    <h2 class="section-title">Shipping</h2>
+
+    <p style="color:var(--pink-light); font-size:1.05rem; font-style:italic; margin-bottom:2rem;">
+      Shipping is available! Price varies depending on the weight of your order.<br>
+      Fill out the form below and we'll message you with your exact shipping quote.
+    </p>
+
+    <div style="background:linear-gradient(135deg,rgba(194,24,91,0.15),rgba(26,10,16,0.95)); border:1px solid rgba(212,160,23,0.4); border-radius:12px; padding:2.5rem 2rem; max-width:600px; margin:0 auto;">
+
+      <div style="margin-bottom:1.2rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">FULL NAME</label>
+        <input id="ship-name" type="text" placeholder="Your full name" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+      </div>
+
+      <div style="margin-bottom:1.2rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">STREET ADDRESS</label>
+        <input id="ship-address" type="text" placeholder="123 Main St" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.2rem;">
+        <div style="text-align:left;">
+          <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">CITY</label>
+          <input id="ship-city" type="text" placeholder="City" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+        </div>
+        <div style="text-align:left;">
+          <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">STATE</label>
+          <input id="ship-state" type="text" placeholder="State" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+        </div>
+      </div>
+
+      <div style="margin-bottom:1.2rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">ZIP CODE</label>
+        <input id="ship-zip" type="text" placeholder="12345" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+      </div>
+
+      <div style="margin-bottom:1.2rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">ESTIMATED ORDER WEIGHT</label>
+        <select id="ship-weight" style="width:100%; padding:0.8rem 1rem; background:#2a0d18; border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+          <option value="">-- Select weight range --</option>
+          <option value="under 1 lb">Under 1 lb (small item)</option>
+          <option value="1–2 lbs">1–2 lbs</option>
+          <option value="2–5 lbs">2–5 lbs</option>
+          <option value="5–10 lbs">5–10 lbs</option>
+          <option value="over 10 lbs">Over 10 lbs</option>
+          <option value="not sure">Not sure — please advise</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:1.8rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">ORDER DETAILS (optional)</label>
+        <textarea id="ship-order" rows="3" placeholder="e.g. 2 custom t-shirts, 1 tumbler..." style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; resize:vertical;"></textarea>
+      </div>
+
+      <button onclick="requestShippingQuote()" style="width:100%; padding:1rem; background:linear-gradient(135deg,var(--pink-deep),var(--pink-hot)); color:#fff; font-family:'Cinzel Decorative',cursive; font-size:0.75rem; letter-spacing:3px; border:2px solid var(--gold); border-radius:6px; cursor:pointer; transition:all 0.3s; box-shadow:0 4px 20px rgba(233,30,140,0.4);">
+        📦 Request Shipping Quote via Facebook
+      </button>
+
+      <p id="ship-error" style="color:#ff6b6b; font-size:0.85rem; margin-top:0.8rem; display:none;">Please fill in all required fields before submitting.</p>
+    </div>
   </section>
 </div>
 
@@ -785,5 +907,71 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
 reveals.forEach(r => observer.observe(r));
 
-// ── SMOOTH SCROLL ──
-document.querySelectorAll('a[href
+// ── SUPABASE SETUP ──
+const _supabase = supabase.createClient(
+  'https://hssqujhernibnkplmnbs.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzc3F1amhlcm5pYm5rcGxtbmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjI0NjQsImV4cCI6MjA4OTkzODQ2NH0.TIypVVcgf0Rh_iKH3znoWXra7uXAnaQaL9NfebPZICk'
+);
+
+// ── SHIPPING QUOTE ──
+async function requestShippingQuote() {
+  const name    = document.getElementById('ship-name').value.trim();
+  const address = document.getElementById('ship-address').value.trim();
+  const city    = document.getElementById('ship-city').value.trim();
+  const state   = document.getElementById('ship-state').value.trim();
+  const zip     = document.getElementById('ship-zip').value.trim();
+  const weight  = document.getElementById('ship-weight').value;
+  const order   = document.getElementById('ship-order').value.trim();
+  const err     = document.getElementById('ship-error');
+  const btn     = document.querySelector('#shipping button');
+
+  if (!name || !address || !city || !state || !zip || !weight) {
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  // Save to Supabase
+  await _supabase.from('shipping_requests').insert({
+    customer_name: name,
+    street_address: address,
+    city, state,
+    zip_code: zip,
+    estimated_weight: weight,
+    order_details: order || null
+  });
+
+  btn.textContent = '✅ Request Sent!';
+  btn.style.background = 'linear-gradient(135deg,#00a825,#00d632)';
+
+  // Also open Facebook message
+  const msg = `Hi! I'd like a shipping quote 📦\n\nName: ${name}\nAddress: ${address}, ${city}, ${state} ${zip}\nEstimated Weight: ${weight}${order ? '\nOrder Details: ' + order : ''}\n\nPlease let me know the shipping cost. Thank you!`;
+  setTimeout(() => window.open(`https://www.facebook.com/messages/t/SIXPLUSMESHIA?text=${encodeURIComponent(msg)}`, '_blank'), 500);
+}
+
+// ── CONTACT FORM ──
+async function submitContact() {
+  const name    = document.getElementById('contact-name').value.trim();
+  const email   = document.getElementById('contact-email').value.trim();
+  const phone   = document.getElementById('contact-phone').value.trim();
+  const message = document.getElementById('contact-message').value.trim();
+  const err     = document.getElementById('contact-error');
+  const success = document.getElementById('contact-success');
+  const btn     = document.querySelector('#contact button');
+
+  if (!name || !message) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  await _supabase.from('contact_submissions').insert({ name, email: email||null, phone: phone||null, message });
+
+  btn.style.display = 'none';
+  success.style.display = 'block';
+  document.getElementById('contact-name').value = '';
+  document.getElementById('contact-email').value = '';
+  document.getElementById('contact-phone').value = '';
+  document.getElementById('contact-message').value = '';
+}
