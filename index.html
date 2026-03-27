@@ -4,6 +4,16 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>6Plus Apparel – Custom Apparel & Personalized Gifts</title>
+
+<!-- ── SECURITY HEADERS (meta fallback for GitHub Pages) ── -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://hssqujhernibnkplmnbs.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://hssqujhernibnkplmnbs.supabase.co; img-src 'self' data: https:; frame-ancestors 'none';"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()"/>
+
+<!-- ── FORCE HTTPS ── -->
+<script>if(location.protocol!=='https:'&&location.hostname!=='localhost'){location.replace('https://'+location.href.slice(7));}</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Cormorant+Garamond:wght@400;600&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -727,6 +737,18 @@
         <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">MESSAGE</label>
         <textarea id="contact-message" rows="4" placeholder="Tell us about your order or ask a question..." style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; resize:vertical;"></textarea>
       </div>
+      <!-- Honeypot -->
+      <div style="display:none;" aria-hidden="true">
+        <input id="contact-honeypot" type="text" name="website" tabindex="-1" autocomplete="off"/>
+      </div>
+
+      <!-- Math CAPTCHA -->
+      <div style="margin-bottom:1.5rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">PROVE YOU'RE HUMAN</label>
+        <p id="contact-captcha-label" style="color:var(--pink-light); margin-bottom:0.5rem; font-style:italic;"></p>
+        <input id="contact-captcha-input" type="number" placeholder="Your answer" data-answer="" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+      </div>
+
       <button onclick="submitContact()" style="width:100%; padding:1rem; background:linear-gradient(135deg,var(--pink-deep),var(--pink-hot)); color:#fff; font-family:'Cinzel Decorative',cursive; font-size:0.75rem; letter-spacing:3px; border:2px solid var(--gold); border-radius:6px; cursor:pointer; box-shadow:0 4px 20px rgba(233,30,140,0.4);">
         ✉️ Send Message
       </button>
@@ -830,6 +852,18 @@
         <textarea id="ship-order" rows="3" placeholder="e.g. 2 custom t-shirts, 1 tumbler..." style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; resize:vertical;"></textarea>
       </div>
 
+      <!-- Honeypot: hidden from real users, bots fill it -->
+      <div style="display:none;" aria-hidden="true">
+        <input id="ship-honeypot" type="text" name="website" tabindex="-1" autocomplete="off"/>
+      </div>
+
+      <!-- Math CAPTCHA -->
+      <div style="margin-bottom:1.8rem; text-align:left;">
+        <label style="font-family:'Cinzel Decorative',cursive; font-size:0.6rem; letter-spacing:3px; color:var(--gold); display:block; margin-bottom:0.4rem;">PROVE YOU'RE HUMAN</label>
+        <p id="ship-captcha-label" style="color:var(--pink-light); margin-bottom:0.5rem; font-style:italic;"></p>
+        <input id="ship-captcha-input" type="number" placeholder="Your answer" data-answer="" style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;">
+      </div>
+
       <button onclick="requestShippingQuote()" style="width:100%; padding:1rem; background:linear-gradient(135deg,var(--pink-deep),var(--pink-hot)); color:#fff; font-family:'Cinzel Decorative',cursive; font-size:0.75rem; letter-spacing:3px; border:2px solid var(--gold); border-radius:6px; cursor:pointer; transition:all 0.3s; box-shadow:0 4px 20px rgba(233,30,140,0.4);">
         📦 Request Shipping Quote via Facebook
       </button>
@@ -912,66 +946,151 @@ const _supabase = supabase.createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzc3F1amhlcm5pYm5rcGxtbmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjI0NjQsImV4cCI6MjA4OTkzODQ2NH0.TIypVVcgf0Rh_iKH3znoWXra7uXAnaQaL9NfebPZICk'
 );
 
+// ── SECURITY UTILITIES ──
+function sanitize(str) {
+  if (!str) return '';
+  return str.replace(/<[^>]*>/g, '').replace(/[<>"'`]/g, '').trim().slice(0, 2000);
+}
+
+const _submitLog = {};
+function checkClientRate(key, maxPerMin) {
+  const now = Date.now();
+  if (!_submitLog[key]) _submitLog[key] = [];
+  _submitLog[key] = _submitLog[key].filter(t => now - t < 60000);
+  if (_submitLog[key].length >= maxPerMin) return false;
+  _submitLog[key].push(now);
+  return true;
+}
+
+function genCaptcha(inputId, labelId) {
+  const a = Math.floor(Math.random()*10)+1;
+  const b = Math.floor(Math.random()*10)+1;
+  document.getElementById(labelId).textContent = 'What is ' + a + ' + ' + b + '?';
+  document.getElementById(inputId).dataset.answer = String(a+b);
+  document.getElementById(inputId).value = '';
+}
+
+function checkCaptcha(inputId) {
+  const el = document.getElementById(inputId);
+  return el.value.trim() === el.dataset.answer;
+}
+
 // ── SHIPPING QUOTE ──
 async function requestShippingQuote() {
-  const name    = document.getElementById('ship-name').value.trim();
-  const address = document.getElementById('ship-address').value.trim();
-  const city    = document.getElementById('ship-city').value.trim();
-  const state   = document.getElementById('ship-state').value.trim();
-  const zip     = document.getElementById('ship-zip').value.trim();
+  if (document.getElementById('ship-honeypot').value) return;
+
+  const name    = sanitize(document.getElementById('ship-name').value);
+  const address = sanitize(document.getElementById('ship-address').value);
+  const city    = sanitize(document.getElementById('ship-city').value);
+  const state   = sanitize(document.getElementById('ship-state').value);
+  const zip     = sanitize(document.getElementById('ship-zip').value);
   const weight  = document.getElementById('ship-weight').value;
-  const order   = document.getElementById('ship-order').value.trim();
+  const order   = sanitize(document.getElementById('ship-order').value);
   const err     = document.getElementById('ship-error');
-  const btn     = document.querySelector('#shipping button');
+  const btn     = document.querySelector('#shipping button[onclick]');
 
   if (!name || !address || !city || !state || !zip || !weight) {
-    err.style.display = 'block';
-    return;
+    err.textContent = 'Please fill in all required fields.';
+    err.style.display = 'block'; return;
   }
+  if (!/^\d{5}(-\d{4})?$/.test(zip)) {
+    err.textContent = 'Please enter a valid ZIP code (e.g. 12345).';
+    err.style.display = 'block'; return;
+  }
+  if (!checkCaptcha('ship-captcha-input')) {
+    err.textContent = 'Incorrect answer. Please try again.';
+    err.style.display = 'block';
+    genCaptcha('ship-captcha-input','ship-captcha-label'); return;
+  }
+  if (!checkClientRate('shipping', 3)) {
+    err.textContent = 'Too many requests. Please wait a moment.';
+    err.style.display = 'block'; return;
+  }
+
   err.style.display = 'none';
   btn.textContent = 'Submitting...';
   btn.disabled = true;
 
-  // Save to Supabase
-  await _supabase.from('shipping_requests').insert({
-    customer_name: name,
-    street_address: address,
-    city, state,
-    zip_code: zip,
-    estimated_weight: weight,
-    order_details: order || null
-  });
-
-  btn.textContent = '✅ Request Sent!';
-  btn.style.background = 'linear-gradient(135deg,#00a825,#00d632)';
-
-  // Also open Facebook message
-  const msg = `Hi! I'd like a shipping quote 📦\n\nName: ${name}\nAddress: ${address}, ${city}, ${state} ${zip}\nEstimated Weight: ${weight}${order ? '\nOrder Details: ' + order : ''}\n\nPlease let me know the shipping cost. Thank you!`;
-  setTimeout(() => window.open(`https://www.facebook.com/messages/t/SIXPLUSMESHIA?text=${encodeURIComponent(msg)}`, '_blank'), 500);
+  try {
+    const { error } = await _supabase.from('shipping_requests').insert({
+      customer_name: name, street_address: address,
+      city: city, state: state, zip_code: zip,
+      estimated_weight: weight, order_details: order || null
+    });
+    if (error) throw error;
+    btn.textContent = '✅ Request Sent!';
+    btn.style.background = 'linear-gradient(135deg,#00a825,#00d632)';
+    genCaptcha('ship-captcha-input','ship-captcha-label');
+    const fbMsg = 'Hi! I\'d like a shipping quote 📦\n\nName: '+name+'\nAddress: '+address+', '+city+', '+state+' '+zip+'\nEstimated Weight: '+weight+(order?'\nOrder Details: '+order:'')+'\n\nPlease let me know the shipping cost. Thank you!';
+    setTimeout(() => window.open('https://www.facebook.com/messages/t/SIXPLUSMESHIA?text='+encodeURIComponent(fbMsg), '_blank'), 500);
+  } catch(e) {
+    btn.textContent = '📦 Request Shipping Quote via Facebook';
+    btn.disabled = false;
+    err.textContent = 'Something went wrong. Please try again.';
+    err.style.display = 'block';
+  }
 }
 
 // ── CONTACT FORM ──
 async function submitContact() {
-  const name    = document.getElementById('contact-name').value.trim();
-  const email   = document.getElementById('contact-email').value.trim();
-  const phone   = document.getElementById('contact-phone').value.trim();
-  const message = document.getElementById('contact-message').value.trim();
+  if (document.getElementById('contact-honeypot').value) return;
+
+  const name    = sanitize(document.getElementById('contact-name').value);
+  const email   = sanitize(document.getElementById('contact-email').value);
+  const phone   = sanitize(document.getElementById('contact-phone').value);
+  const message = sanitize(document.getElementById('contact-message').value);
   const err     = document.getElementById('contact-error');
   const success = document.getElementById('contact-success');
-  const btn     = document.querySelector('#contact button');
+  const btn     = document.querySelector('#contact button[onclick]');
 
-  if (!name || !message) { err.style.display = 'block'; return; }
+  if (!name || name.length < 2) {
+    err.textContent = 'Please enter your name (at least 2 characters).';
+    err.style.display = 'block'; return;
+  }
+  if (!message || message.length < 5) {
+    err.textContent = 'Please enter a message (at least 5 characters).';
+    err.style.display = 'block'; return;
+  }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    err.textContent = 'Please enter a valid email address.';
+    err.style.display = 'block'; return;
+  }
+  if (!checkCaptcha('contact-captcha-input')) {
+    err.textContent = 'Incorrect answer. Please try again.';
+    err.style.display = 'block';
+    genCaptcha('contact-captcha-input','contact-captcha-label'); return;
+  }
+  if (!checkClientRate('contact', 3)) {
+    err.textContent = 'Too many submissions. Please wait a moment.';
+    err.style.display = 'block'; return;
+  }
+
   err.style.display = 'none';
   btn.textContent = 'Sending...';
   btn.disabled = true;
 
-  await _supabase.from('contact_submissions').insert({ name, email: email||null, phone: phone||null, message });
-
-  btn.style.display = 'none';
-  success.style.display = 'block';
-  document.getElementById('contact-name').value = '';
-  document.getElementById('contact-email').value = '';
-  document.getElementById('contact-phone').value = '';
-  document.getElementById('contact-message').value = '';
+  try {
+    const { error } = await _supabase.from('contact_submissions').insert({
+      name, email: email||null, phone: phone||null, message
+    });
+    if (error) throw error;
+    btn.style.display = 'none';
+    success.style.display = 'block';
+    ['contact-name','contact-email','contact-phone','contact-message'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    genCaptcha('contact-captcha-input','contact-captcha-label');
+  } catch(e) {
+    btn.textContent = '✉️ Send Message';
+    btn.disabled = false;
+    err.textContent = 'Something went wrong. Please try again.';
+    err.style.display = 'block';
+  }
 }
+
+// Init CAPTCHAs on load
+window.addEventListener('load', () => {
+  genCaptcha('ship-captcha-input','ship-captcha-label');
+  genCaptcha('contact-captcha-input','contact-captcha-label');
+});
 </script>
