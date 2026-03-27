@@ -15,7 +15,6 @@
 <script>if(location.protocol!=='https:'&&location.hostname!=='localhost'){location.replace('https://'+location.href.slice(7));}</script>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Cormorant+Garamond:wght@400;600&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --pink-deep: #c2185b;
@@ -955,10 +954,26 @@ const observer = new IntersectionObserver(entries => {
 reveals.forEach(r => observer.observe(r));
 
 // ── SUPABASE SETUP ──
-const _supabase = supabase.createClient(
-  'https://hssqujhernibnkplmnbs.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzc3F1amhlcm5pYm5rcGxtbmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjI0NjQsImV4cCI6MjA4OTkzODQ2NH0.TIypVVcgf0Rh_iKH3znoWXra7uXAnaQaL9NfebPZICk'
-);
+const SB_URL = 'https://hssqujhernibnkplmnbs.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzc3F1amhlcm5pYm5rcGxtbmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjI0NjQsImV4cCI6MjA4OTkzODQ2NH0.TIypVVcgf0Rh_iKH3znoWXra7uXAnaQaL9NfebPZICk';
+
+async function sbInsert(table, data) {
+  const res = await fetch(SB_URL + '/rest/v1/' + table, {
+    method: 'POST',
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+  return true;
+}
 
 // ── SECURITY UTILITIES ──
 function sanitize(str) {
@@ -1026,12 +1041,11 @@ async function requestShippingQuote() {
   btn.disabled = true;
 
   try {
-    const { error } = await _supabase.from('shipping_requests').insert({
+    await sbInsert('shipping_requests', {
       customer_name: name, street_address: address,
       city: city, state: state, zip_code: zip,
       estimated_weight: weight, order_details: order || null
     });
-    if (error) throw error;
     btn.textContent = '✅ Request Sent!';
     btn.style.background = 'linear-gradient(135deg,#00a825,#00d632)';
     genCaptcha('ship-captcha-input','ship-captcha-label');
@@ -1084,10 +1098,9 @@ async function submitContact() {
   btn.disabled = true;
 
   try {
-    const { error } = await _supabase.from('contact_submissions').insert({
+    await sbInsert('contact_submissions', {
       name, email: email||null, phone: phone||null, message
     });
-    if (error) throw error;
     btn.style.display = 'none';
     success.style.display = 'block';
     ['contact-name','contact-email','contact-phone','contact-message'].forEach(id => {
