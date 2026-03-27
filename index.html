@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -851,7 +850,7 @@
       <input id="admin-pwd" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter') adminLogin()" style="width:100%; padding:0.9rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(212,160,23,0.4); border-radius:6px; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; margin-bottom:1rem;"/>
       <button onclick="adminLogin()" style="width:100%; padding:1rem; background:linear-gradient(135deg,var(--pink-deep),var(--pink-hot)); color:#fff; font-family:'Cinzel Decorative',cursive; font-size:0.7rem; letter-spacing:3px; border:2px solid var(--gold); border-radius:6px; cursor:pointer;">Access Dashboard</button>
       <p id="admin-login-error" style="color:#ff6b6b; font-size:0.85rem; margin-top:0.8rem; display:none;">Incorrect password.</p>
-      <button onclick="closeAdmin()" style="margin-top:1rem; background:transparent; border:none; color:rgba(248,187,208,0.5); cursor:pointer; font-family:'Cormorant Garamond',serif; font-size:0.9rem;">✕ Close</button>
+      <button onclick="document.getElementById('admin-login').style.display='flex'; document.getElementById('admin-panel').style.display='none'; document.getElementById('admin-pwd').value=''; document.getElementById('admin-login-error').style.display='none';" style="margin-top:1rem; background:transparent; border:none; color:rgba(248,187,208,0.5); cursor:pointer; font-family:'Cormorant Garamond',serif; font-size:0.9rem;">✕ Close & Return to Site</button>
     </div>
   </div>
 
@@ -915,7 +914,8 @@
 
 <!-- ADMIN ACCESS BUTTON -->
 <div style="position:fixed; bottom:15px; right:15px; z-index:99999;">
-  <button onclick="openAdmin()" style="background:rgba(26,10,16,0.9); border:1px solid rgba(212,160,23,0.5); color:rgba(212,160,23,0.7); padding:0.4rem 1rem; border-radius:4px; cursor:pointer; font-family:'Cinzel Decorative',cursive; font-size:0.5rem; letter-spacing:2px; pointer-events:all;">
+  <button style="background:rgba(26,10,16,0.9); border:1px solid rgba(212,160,23,0.5); color:rgba(212,160,23,0.7); padding:0.4rem 1rem; border-radius:4px; cursor:pointer; font-family:'Cinzel Decorative',cursive; font-size:0.5rem; letter-spacing:2px;" 
+    onclick="document.getElementById('admin-dashboard').style.display='block'; document.body.style.overflow='hidden';">
     Owner Login
   </button>
 </div>
@@ -1158,3 +1158,4 @@ async function adminMarkResponded(id, val) {
   await _supabase.from('contact_submissions').update({responded:val}).eq('id',id);
   loadAdminMessages();
 }
+
